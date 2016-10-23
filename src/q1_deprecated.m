@@ -7,14 +7,14 @@
 %
 % Author: Ted Frohlich <ttf10@case.edu>
 %
-function q2
+function q1
   
   set(gcf, 'Name','Question 1')
   axlh = subplot(2,1,1);  hold on;  grid on
   axrh = subplot(2,1,2);  hold on;  grid on
   
+  % Load appropriate trials
   for trial = 1:4
-    
     load(sprintf('mat files\\BME101316_%i.mat', trial))
     
     vst = findVel(st, t);
