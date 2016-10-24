@@ -9,7 +9,7 @@
 %
 function q2
   
-  set(gcf, 'Name','Question 1')
+  set(gcf, 'Name','Question 2')
   axlh = subplot(2,1,1);  hold on;  grid on
   axrh = subplot(2,1,2);  hold on;  grid on
   
@@ -40,13 +40,5 @@ function q2
     ylabel(ax(i), 'Gain (arb. units)', 'FontWeight','bold')
     legend(ax(i), '5\circ/s', '10\circ/s', '20\circ/s', '40\circ/s')
   end
-  
-end
-
-
-function d = findVel(x, t)
-  
-  dt = t(2) - t(1);
-  d = (x(2:end) - x(1:end-1)) / dt;
   
 end
