@@ -41,4 +41,5 @@ end
 file_ = sprintf('%s_%i.mat', file_, trial);
 load(fullfile(dir_, file_))
 
+figure(100)
 set(gcf, 'Name',file_)
