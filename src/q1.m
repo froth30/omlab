@@ -8,46 +8,49 @@
 % Author: Ted Frohlich <ttf10@case.edu>
 %
 
-clear;  clf;  clc
+clear
 
-set(gcf, 'Name','Question 1')
-axlh = subplot(1,2,1);  cla;  hold on
-axrh = subplot(1,2,2);  cla;  hold on
+set(figure(1), 'Name','Question 1')
 
-tBoundsL = {[60.32 65.66], ...
-            [18.8  21.34], ...
-            [22.01 23.26], ...
-            [22.23 22.97]};
-tBoundsR = {[53.32 58.88], ...
-            [14.8  17.46], ...
-            [19.42 20.73], ...
-            [20.75 21.34]};
+velTarR = [5 10 20 40];
+velTarL = -velTarR;
+
+tBoundsR = {[ 54.5   57.5  ], ...
+            [  7.4    8.6  ], ...
+            [ 24.8   25.4  ], ...
+            [ 10.47  10.64 ]};
+tBoundsL = {[ 34.2   35.6  ], ...
+            [ 11.4   12.8  ], ...
+            [ 27.3   27.8  ], ...
+            [ 12.18  12.37 ]};
+
+VT = velTarR;
+GR = zeros(1,4);
+GL = zeros(1,4);
 
 for trial = 1:4
   load(sprintf('mat files\\BME101316_%i.mat', trial))
+  posEye = lh;  % use left eye only
   
-  velTarL = findVel(st, t, tBoundsL{trial});
-  velEyeL = findVel(lh, t, tBoundsL{trial});
-  GL = smoothData(velEyeL ./ velTarL);
+  velEyeR = findVel(posEye, t, tBoundsR{trial});
+  velEyeL = findVel(posEye, t, tBoundsL{trial});
   
-  velTarR = findVel(st, t, tBoundsR{trial});
-  velEyeR = findVel(rh, t, tBoundsR{trial});
-  GR = smoothData(velEyeR ./ velTarR);
+  gr = velEyeR / velTarR(trial);
+  gl = velEyeL / velTarL(trial);
   
-  tnL = linspace(0,1,length(GL));
-  tnR = linspace(0,1,length(GR));
-  
-  semilogy(axlh, tnL, GL)
-  semilogy(axrh, tnR, GR)
+  GR(trial) = mean(gr);
+  GL(trial) = mean(gl);
 end
 
-side = {'Left', 'Right'};
-ax = [axlh axrh];
-for i = 1:2
-  subplot(ax(i));  grid on;  hold off
-  title(sprintf('Smooth Pursuit Gain (%s Eye)', side{i}))
-  ylim([0 8])
-  xlabel('Normalized Time (arb. units)', 'FontWeight','bold')
-  ylabel('Gain (arb. units)', 'FontWeight','bold')
-  legend('5\circ/s', '10\circ/s', '20\circ/s', '40\circ/s')
-end
+co = get(groot, 'DefaultAxesColorOrder');
+coL = co(5,:);    coR = co(1,:);
+
+plot(VT, GL, '*-', 'Color',coL, 'LineWidth',2);  hold on
+plot(VT, GR, '*-', 'Color',coR, 'LineWidth',2)
+ylim([0 1.2]);  grid on;  hold off
+
+title('Smooth Pursuit Gain (Left Eye)')
+xlabel('Target Velocity (\circ/s)', 'FontWeight','bold')
+ylabel('Gain', 'FontWeight','bold')
+legend('pursuit to the left', ...
+       'pursuit to the right',    'Location','southeast')
