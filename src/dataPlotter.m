@@ -8,7 +8,7 @@
 % Author: Ted Frohlich <ttf10@case.edu>
 %
 
-loadTrial()
+loadTrial();  clf
 
 co = get(groot, 'DefaultAxesColorOrder');
 
