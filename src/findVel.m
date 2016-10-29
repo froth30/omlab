@@ -17,7 +17,7 @@ function v = findVel(x, t, tbounds)
   dt = t(2) - t(1);
   
   % Compute differnce
-  v = (x(i1:i2-1) - x(i1+1:i2)) / dt;
-  v = smoothData(v, 2);
+  v = (x(i1+1:i2) - x(i1:i2-1)) / dt;
+%   v = smoothData(v, 2);
   
 end
