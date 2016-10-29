@@ -37,8 +37,8 @@ for trial = 1:4
   tnL = linspace(0,1,length(GL));
   tnR = linspace(0,1,length(GR));
   
-  plot(axlh, tnL, GL)
-  plot(axrh, tnR, GR)
+  semilogy(axlh, tnL, GL)
+  semilogy(axrh, tnR, GR)
 end
 
 side = {'Left', 'Right'};
@@ -46,8 +46,8 @@ ax = [axlh axrh];
 for i = 1:2
   subplot(ax(i));  grid on;  hold off
   title(sprintf('Smooth Pursuit Gain (%s Eye)', side{i}))
-  ylim([0 10])
-  xlabel('Time (s)', 'FontWeight','bold')
+  ylim([0 8])
+  xlabel('Normalized Time (arb. units)', 'FontWeight','bold')
   ylabel('Gain (arb. units)', 'FontWeight','bold')
   legend('5\circ/s', '10\circ/s', '20\circ/s', '40\circ/s')
 end
