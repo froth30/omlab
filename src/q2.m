@@ -7,38 +7,44 @@
 %
 % Author: Ted Frohlich <ttf10@case.edu>
 %
-function q2
+
+clear
+
+set(figure(20), 'Name','Question 2')
+
+velTarR = [5 10 20 40];
+velTarL = -velTarR;
+
+tBoundsR = {[ 54.5   57.5  ], ...
+            [  7.4    8.6  ], ...
+            [ 24.8   25.4  ], ...
+            [ 10.47  10.64 ]};
+tBoundsL = {[ 34.2   35.6  ], ...
+            [ 11.4   12.8  ], ...
+            [ 27.3   27.8  ], ...
+            [ 12.18  12.37 ]};
+
+VT = velTarR;
+GR = zeros(1,4);
+GL = zeros(1,4);
+
+for trial = 1:4
+  load(sprintf('mat files\\BME101316_%i.mat', trial))
+  posEye = lh;  % use left eye only
   
-  set(gcf, 'Name','Question 2')
-  axlh = subplot(2,1,1);  hold on;  grid on
-  axrh = subplot(2,1,2);  hold on;  grid on
+  velEyeR = findVel(posEye, t, tBoundsR{trial});
+  velEyeL = findVel(posEye, t, tBoundsL{trial});
   
-  for trial = 1:4
-    
-    load(sprintf('mat files\\BME101316_%i.mat', trial))
-    
-    vst = findVel(st, t);
-    vlh = findVel(lh, t);
-    vrh = findVel(rh, t);
-    
-    Glh = vlh ./ vst;
-    Grh = vrh ./ vst;
-    
-    t = t(1:end-1);
-    
-    plot(axlh, t, Glh)
-    plot(axrh, t, Grh)
-    
-  end
+  gr = velEyeR / velTarR(trial);
+  gl = velEyeL / velTarL(trial);
   
-  side = {'Left', 'Right'};
-  ax = [axlh axrh];
-  for i = 1:2
-    title(ax(i), sprintf('Smooth Pursuit Gain (%s Eye)', side{i}))
-    ylim(ax(i), [-100 +100])
-    xlabel(ax(i), 'Time (s)', 'FontWeight','bold')
-    ylabel(ax(i), 'Gain (arb. units)', 'FontWeight','bold')
-    legend(ax(i), '5\circ/s', '10\circ/s', '20\circ/s', '40\circ/s')
-  end
-  
+  GR(trial) = mean(gr);
+  GL(trial) = mean(gl);
 end
+
+co = get(groot, 'DefaultAxesColorOrder');
+coL = co(5,:);    coR = co(1,:);
+
+plot(VT, GL, '*-', 'Color',coL, 'LineWidth',2);  hold on
+plot(VT, GR, '*-', 'Color',coR, 'LineWidth',2)
+xlim([0 50]);  ylim([0 1.2]);  grid on;  hold off
