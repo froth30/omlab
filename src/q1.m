@@ -10,7 +10,7 @@
 
 clear
 
-set(figure(1), 'Name','Question 1')
+set(figure(10), 'Name','Question 1')
 
 velTarR = [5 10 20 40];
 velTarL = -velTarR;
