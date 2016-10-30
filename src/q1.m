@@ -51,6 +51,6 @@ xlim([0 50]);  ylim([0 1.2]);  grid on;  hold off
 
 title('Smooth Pursuit Gain vs. Target Velocity')
 xlabel('Target Velocity (\circ/sec)', 'FontWeight','bold')
-ylabel('Gain', 'FontWeight','bold')
+ylabel('Smooth Pursuit Gain', 'FontWeight','bold')
 legend('pursuit to the left', 'pursuit to the right', ...
        'Location','southeast')
