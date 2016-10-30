@@ -24,11 +24,16 @@ function v = findVel(x, t, tbounds, varargin)
   if ~isempty(varargin)
     property = varargin{1};
     value    = varargin{2};
+    
     if strcmp(property,'Smoothing')
       if isnumeric(value)
         v = smoothData(v, value);
       elseif strcmp(value,'auto')
         v = smoothData(v, 2);
+      end
+    elseif strcmp(property,'Mean')
+      if value
+        v = mean(v);
       end
     end
   end
