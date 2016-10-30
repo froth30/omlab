@@ -12,39 +12,49 @@ clear
 
 set(figure(20), 'Name','Question 2')
 
-velTarR = [5 10 20 40];
-velTarL = -velTarR;
+tboundsL = {[ 49.69  50.16 ], ...
+            [  4.8    5.33 ], ...
+            [  6.97   7.1  ], ...
+            [  2.44   2.54 ]};
+tboundsR = {[ 39.29  40.56 ], ...
+            [ 29.65  30.5  ], ...
+            [  5.89   6.13 ], ...
+            [  1.98   2.09 ]};
 
-tBoundsR = {[ 54.5   57.5  ], ...
-            [  7.4    8.6  ], ...
-            [ 24.8   25.4  ], ...
-            [ 10.47  10.64 ]};
-tBoundsL = {[ 34.2   35.6  ], ...
-            [ 11.4   12.8  ], ...
-            [ 27.3   27.8  ], ...
-            [ 12.18  12.37 ]};
-
-VT = velTarR;
-GR = zeros(1,4);
+f = [0.05 0.1 0.5 1];
 GL = zeros(1,4);
+GR = zeros(1,4);
 
-for trial = 1:4
-  load(sprintf('mat files\\BME101316_%i.mat', trial))
+trial = 5:8;
+for i = 1:4
+  load(sprintf('mat files\\BME101316_%i.mat', trial(i)))
   posEye = lh;  % use left eye only
   
-  velEyeR = findVel(posEye, t, tBoundsR{trial});
-  velEyeL = findVel(posEye, t, tBoundsL{trial});
+  tbl = tboundsL{i};  % time bounds (pursuit to left)
+  tbr = tboundsR{i};  % time bounds (pursuit to right)
   
-  gr = velEyeR / velTarR(trial);
-  gl = velEyeL / velTarL(trial);
+  velTarL = findVel(st, t, tbl, 'Mean',true);
+  velTarR = findVel(st, t, tbr, 'Mean',true);
   
-  GR(trial) = mean(gr);
-  GL(trial) = mean(gl);
+  velEyeL = findVel(posEye, t, tbl);
+  velEyeR = findVel(posEye, t, tbr);
+  
+  gr = velEyeR ./ velTarR;
+  gl = velEyeL ./ velTarL;
+  
+  GR(i) = mean(gr);
+  GL(i) = mean(gl);
 end
 
 co = get(groot, 'DefaultAxesColorOrder');
 coL = co(5,:);    coR = co(1,:);
 
-plot(VT, GL, '*-', 'Color',coL, 'LineWidth',2);  hold on
-plot(VT, GR, '*-', 'Color',coR, 'LineWidth',2)
-xlim([0 50]);  ylim([0 1.2]);  grid on;  hold off
+plot(f, GL, '*-', 'Color',coL, 'LineWidth',2);  hold on
+plot(f, GR, '*-', 'Color',coR, 'LineWidth',2)
+xlim([0 1]);  ylim([0 1.2]);  grid on;  hold off
+
+title('Smooth Pursuit Gain vs. Target Frequency')
+xlabel('Target Frequency (Hz)', 'FontWeight','bold')
+ylabel('Smooth Pursuit Gain', 'FontWeight','bold')
+legend('pursuit to the left', 'pursuit to the right', ...
+       'Location','southeast')
