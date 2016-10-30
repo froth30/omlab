@@ -47,10 +47,10 @@ coL = co(5,:);    coR = co(1,:);
 
 plot(VT, GL, '*-', 'Color',coL, 'LineWidth',2);  hold on
 plot(VT, GR, '*-', 'Color',coR, 'LineWidth',2)
-ylim([0 1.2]);  grid on;  hold off
+xlim([0 50]);  ylim([0 1.2]);  grid on;  hold off
 
-title('Smooth Pursuit Gain (Left Eye)')
-xlabel('Target Velocity (\circ/s)', 'FontWeight','bold')
+title('Smooth Pursuit Gain vs. Target Velocity')
+xlabel('Target Velocity (\circ/sec)', 'FontWeight','bold')
 ylabel('Gain', 'FontWeight','bold')
-legend('pursuit to the left', ...
-       'pursuit to the right',    'Location','southeast')
+legend('pursuit to the left', 'pursuit to the right', ...
+       'Location','southeast')
