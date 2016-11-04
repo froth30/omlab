@@ -10,7 +10,7 @@
 
 clear
 
-set(figure(20), 'Name','Question 2')
+set(figure(20), 'Name','Question 2: Gain')
 
 tboundsL = {[ 49.69  50.16 ], ...
             [  4.8    5.33 ], ...
@@ -46,6 +46,7 @@ for i = 1:4
   GL(i) = mean(gl);
 end
 
+%% Pursuit Gain
 co = get(groot, 'DefaultAxesColorOrder');
 coL = co(5,:);    coR = co(1,:);
 
@@ -58,3 +59,18 @@ xlabel('Target Frequency (Hz)', 'FontWeight','bold')
 ylabel('Smooth Pursuit Gain', 'FontWeight','bold')
 legend('pursuit to the left', 'pursuit to the right', ...
        'Location','southeast')
+
+%% Phase Lag (or Lead)
+set(figure(21), 'Name','Question 2: Phase')
+
+tarCross = [ 80     10     1      5.5  ];
+eyeCross = [ 80.09  10.11  1.066  5.598];
+
+phaseLag = eyeCross - tarCross;
+
+plot(f, phaseLag, '*:', 'Color',coL, 'LineWidth',2)
+xlim([0 1]);  ylim([0 0.2]);  grid on
+
+title('Phase Lag vs. Target Frequency')
+xlabel('Target Frequency (Hz)', 'FontWeight','bold')
+ylabel('Phase Lag (\circ)', 'FontWeight','bold')
