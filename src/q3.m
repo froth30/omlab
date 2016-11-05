@@ -9,14 +9,15 @@
 %
 
 clear
-
 % set(figure(30), 'Name','Question 3: Imaginary Tracking')
 
-dataPlotter  % Trials 9-10
-... then apply the appropriate annotations below using Ctrl+Enter
+dataPlotter
+% (1) Enter 9 or 10 for the trial number
+% (2) Hit Ctrl+C to exit
+% (3) Apply the appropriate annotations below
 
 %% Annotate figure for Trial 9
-title('Pursuit in the Dark: Finger Target')
+title('Pursuit in the Dark: Imagined Target')
 
 %% Annotate figure for Trial 10
-title('Pursuit in the Dark: Imagined Target')
+title('Pursuit in the Dark: Finger Target')
