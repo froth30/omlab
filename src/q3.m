@@ -13,3 +13,10 @@ clear
 % set(figure(30), 'Name','Question 3: Imaginary Tracking')
 
 dataPlotter  % Trials 9-10
+... then apply the appropriate annotations below using Ctrl+Enter
+
+%% Annotate figure for Trial 9
+title('Pursuit in the Dark: Finger Target')
+
+%% Annotate figure for Trial 10
+title('Pursuit in the Dark: Imagined Target')
