@@ -7,39 +7,52 @@
 %
 % Author: Ted Frohlich <ttf10@case.edu>
 %
-
-clear;  dir_  = 'mat files';  file_ = 'BME101316';
-
-trial_str = input('Trial to plot: ', 's');
-trial = str2double(trial_str);
-
-if ~isnan(trial)
-  if trial < 1 || trial > 28
-    disp('[!] Couldn''t load file. Trial range is 1-28.')
-    dataPlotter()
-  end
-  if trial >= 22
-    file_([7 9]) = '5';
-  end
-elseif strcmp(trial_str(1:3), 'vor')
-  trial = str2double(trial_str(4:end));
-  if isnan(trial)
+function loadTrial(varargin)
+  
+  % Initialize parts of filepath
+  dir_ = 'mat files';  file_ = 'BME101316';
+  
+  % Check for invalid argument
+  try
+    switch nargin
+      case 0
+        trial = input('Trial to plot: ');
+      case 1
+        trial = varargin{1};
+        if ~isnumeric
+          error()
+        end
+      otherwise
+        error()
+    end
+  catch
     disp('[!] Invalid input. (Ctrl+C -> exit)')
-    dataPlotter()
-  elseif trial < 22 || trial > 27
-    disp('[!] Couldn''t load file. Trial range is 22-27.')
-    dataPlotter()
-  else
-    disp('[.] Plotting our VOR data...')
-    file_ = fullfile('VOR without chair channel)', file_);
+    loadTrial();  return  % try again
   end
-else
-  disp('[!] Invalid input. (Ctrl+C -> exit)')
-  dataPlotter()
+  
+  % Configure file path
+  if trial >= 1 && trial <= 28
+    if trial >= 22
+      file_([7 9]) = '5';
+    end
+  elseif trial <= -22 && trial >= -27
+    file_ = fullfile('VOR without chair channel)', file_);
+    trial = -trial;
+  else
+    disp('[!] Couldn''t load file. Trial range is 1-28.')
+    disp('     * Enter ''-'' 22-27 for erred VOR data...')
+    loadTrial();  return  % try again
+  end
+  
+  % Load data from file
+  file_ = sprintf('%s_%i.mat', file_, trial);
+  load(fullfile(dir_, file_))
+  
+  % Save data to base workspace (outlive function workspace)
+  assignin( 'caller',  'filename',  file_ )
+  assignin( 'caller',  'lh'      ,  lh    )
+  assignin( 'caller',  'rh'      ,  rh    )
+  assignin( 'caller',  'st'      ,  st    )
+  assignin( 'caller',  't'       ,  t     )
+  
 end
-
-file_ = sprintf('%s_%i.mat', file_, trial);
-load(fullfile(dir_, file_))
-
-figure(1)
-set(gcf, 'Name',file_)
