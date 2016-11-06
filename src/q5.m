@@ -9,10 +9,12 @@
 %
 
 clear
-
+dataPlotter(21)
 set(gcf, 'Name','Question 5')
 
-load('mat files\BME101316_21.mat')
+%% Zoom in on first couple saccades
+xlim([0.4 2])
+... TODO
 
 %% Find target 'saccades'
 
