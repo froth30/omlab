@@ -33,8 +33,8 @@ function dataPlotter(varargin)
   
   % Annotate plot
   title('Eye Movement')
-  xlabel('Time (s)',             'FontWeight','bold')
-  ylabel('Eye Position (\circ)', 'FontWeight','bold')
+  xlabel('Time (s)',         'FontWeight','bold')
+  ylabel('Position (\circ)', 'FontWeight','bold')
   legend('Target', 'Left Eye', 'Right Eye')
   
   if repeat
