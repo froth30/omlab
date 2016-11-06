@@ -19,7 +19,7 @@ function loadTrial(varargin)
         trial = input('Trial to plot: ');
       case 1
         trial = varargin{1};
-        if ~isnumeric
+        if ~isnumeric(trial)
           error()
         end
       otherwise
