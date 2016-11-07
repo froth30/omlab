@@ -128,5 +128,13 @@ for i = 1:length(tframes)
 end
 disp('Completed parameter measurements!')
 
-% Compute means for each target delay
-table1 = table(T, a1, a2, t2, ISI);    disp(table1)
+% Compute means for each of the 11 different target delays
+T_ = [0.02 0.05 0.1 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50];
+Z = zeros(1,11);  mean_a1 = Z;  mean_a2 = Z;  mean_t2 = Z;  mean_ISI = Z;
+for i = 1:11
+  frames   = abs(T-T_(i))/T_(i) < 0.01;
+  mean_a1 (i) = mean(a1 (frames & ~isnan(a1 )));
+  mean_a2 (i) = mean(a2 (frames & ~isnan(a2 )));
+  mean_t2 (i) = mean(t2 (frames & ~isnan(t2 )));
+  mean_ISI(i) = mean(ISI(frames & ~isnan(ISI)));
+end
