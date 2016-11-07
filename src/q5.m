@@ -87,28 +87,43 @@ annotation('textbox', [0.79 0.5 0.0209 0.03],...
 
 %% Find target 'saccades'
 
-spikeRises = [];
-spikeFalls = [];
-index = 1;
+clear;  loadTrial(21)
 
-spikeRise = NaN;
+tframes = 0:3:t(end-1);
+NaNs = NaN(size(tframes));   T  = NaNs;
+a1 = NaNs;  a2 = NaNs;  t2 = NaNs;  ISI = NaNs;
 
-while ~isempty(spikeRise)
+dataPlotter(21);  ylim([-15 20])
+
+for i = 1:length(tframes)
+  fprintf('Frame #%i:\n', i)
+  tframe = tframes(i);  xlim([0 3] + tframe)
+  ii = find(t >= tframe & t < tframe+3);
+  tt = t(ii);  LH = lh(ii);  RH = rh(ii);  ST = st(ii);
+  ii = ii - ii(1);
   
-  spikeRise = (index-1) + find(st(index:end) > 1, 1);
-  spikeRises = [spikeRises spikeRise];
+  % Find T
+  iT0 = find(ST < -1, 1);
+  iT1 = iT0 + find(st(iT0:ii(end)) < -1, 1, 'last');
+  T0 = tt(iT0);  T1 = tt(iT1);  T(i) = T1 - T0;
+  fprintf('  T  = %.2f\n', T(i))
   
-  spikeFall = (spikeRise-2) + find(st(spikeRise:end) < 1, 1);
-  spikeFalls = [spikeFalls spikeFall];
-  
-  index = spikeFall + 1;
-  
+  try
+    % Find a1 and a2
+    a1(i) = input('  a1 = ');
+    a2(i) = input('  a2 = ');
+
+    % Find t2 and ISI
+    ISI0 = input('  Start time of ISI: ');
+    ISI1 = input('  End   time of ISI: ');
+    t2(i) = ISI1 - T1;     fprintf('   -> t2  = %.2f\n',  t2(i))
+    ISI(i) = ISI1 - ISI0;  fprintf('   -> ISI = %.2f\n', ISI(i))
+  catch
+    T(i) = NaN;   ... Invalidate this frame
+    a1(i) = NaN;  a2(i) = NaN;  t2(i) = NaN;  ISI(i) = NaN;
+  end
 end
+disp('Completed parameter measurements!')
 
-%% Compute target delays
-
-starts = t(spikeRises);
-delays = t(spikeFalls) - starts;
-
-% Print results
-disp([starts delays])
+% Compute means for each target delay
+table1 = table(T, a1, a2, t2, ISI);    disp(table1)
