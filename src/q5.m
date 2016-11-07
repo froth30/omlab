@@ -90,51 +90,19 @@ annotation('textbox', [0.79 0.5 0.0209 0.03],...
 clear;  loadTrial(21)
 
 tframes = 0:3:t(end-1);
-NaNs = NaN(size(tframes));   T  = NaNs;
-a1 = NaNs;  a2 = NaNs;  t2 = NaNs;  ISI = NaNs;
+nframes = length(tframes);
 
 dataPlotter(21);  ylim([-15 20])
 
-for i = 1:length(tframes)
+T = NaN(nframes,5);
+%% BREAK - force workspace to update
+for i = 1:nframes
   fprintf('Frame #%i:\n', i)
   tframe = tframes(i);  xlim([0 3] + tframe)
-  ii = find(t >= tframe & t < tframe+3);
-  tt = t(ii);  LH = lh(ii);  RH = rh(ii);  ST = st(ii);
-  ii = ii - ii(1);
-  
-  % Find T
-  iT0 = find(abs(ST) > 1, 1);
-  iT1 = iT0 + find(abs(st(iT0:ii(end))-st(iT0)) > 1, 1);
-  T0 = tt(iT0);  T1 = tt(iT1);  T(i) = T1 - T0;
-  fprintf('  T  = %.2f\n', T(i))
-  
-  try
-    % Find a1 and a2
-    disp('  Enter amplitudes graphically...')
-    fprintf('    ->  a1  = ')
-    p = ginput(1);  a1(i) = p(2);  fprintf('%.2f\n', a1(i))
-    fprintf('    ->  a2  = ')
-    p = ginput(1);  a2(i) = p(2);  fprintf('%.2f\n', a2(i))
-    
-    % Find t2 and ISI
-    disp('  Enter ISI endpoints graphically...')
-    p = ginput(2);  [ISI0,ISI1] = sort(p(:,1));
-    t2(i)  = ISI1-T1;    fprintf('    ->  t2  = %.2f',  t2(i))
-    ISI(i) = ISI1-ISI0;  fprintf('    ->  ISI = %.2f', ISI(i))
-  catch
-    T(i) = NaN;   ... Invalidate this frame
-    a1(i) = NaN;  a2(i) = NaN;  t2(i) = NaN;  ISI(i) = NaN;
+  k = 0;
+  while ~k
+    k = waitforbuttonpress;
   end
 end
-disp('Completed parameter measurements!')
-
-% Compute means for each of the 11 different target delays
-T_ = [0.02 0.05 0.1 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50];
-Z = zeros(1,11);  mean_a1 = Z;  mean_a2 = Z;  mean_t2 = Z;  mean_ISI = Z;
-for i = 1:11
-  frames   = abs(T-T_(i))/T_(i) < 0.01;
-  mean_a1 (i) = mean(a1 (frames & ~isnan(a1 )));
-  mean_a2 (i) = mean(a2 (frames & ~isnan(a2 )));
-  mean_t2 (i) = mean(t2 (frames & ~isnan(t2 )));
-  mean_ISI(i) = mean(ISI(frames & ~isnan(ISI)));
-end
+disp('Reached end of saccadic tests. Hit any key to exit...')
+waitforbuttonpress;  close
