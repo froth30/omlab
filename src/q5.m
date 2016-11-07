@@ -103,21 +103,24 @@ for i = 1:length(tframes)
   ii = ii - ii(1);
   
   % Find T
-  iT0 = find(ST < -1, 1);
-  iT1 = iT0 + find(st(iT0:ii(end)) < -1, 1, 'last');
+  iT0 = find(abs(ST) > 1, 1);
+  iT1 = iT0 + find(abs(st(iT0:ii(end))-st(iT0)) > 1, 1);
   T0 = tt(iT0);  T1 = tt(iT1);  T(i) = T1 - T0;
   fprintf('  T  = %.2f\n', T(i))
   
   try
     % Find a1 and a2
-    a1(i) = input('  a1 = ');
-    a2(i) = input('  a2 = ');
-
+    disp('  Enter amplitudes graphically...')
+    fprintf('    ->  a1  = ')
+    p = ginput(1);  a1(i) = p(2);  fprintf('%.2f\n', a1(i))
+    fprintf('    ->  a2  = ')
+    p = ginput(1);  a2(i) = p(2);  fprintf('%.2f\n', a2(i))
+    
     % Find t2 and ISI
-    ISI0 = input('  Start time of ISI: ');
-    ISI1 = input('  End   time of ISI: ');
-    t2(i) = ISI1 - T1;     fprintf('   -> t2  = %.2f\n',  t2(i))
-    ISI(i) = ISI1 - ISI0;  fprintf('   -> ISI = %.2f\n', ISI(i))
+    disp('  Enter ISI endpoints graphically...')
+    p = ginput(2);  [ISI0,ISI1] = sort(p(:,1));
+    t2(i)  = ISI1-T1;    fprintf('    ->  t2  = %.2f',  t2(i))
+    ISI(i) = ISI1-ISI0;  fprintf('    ->  ISI = %.2f', ISI(i))
   catch
     T(i) = NaN;   ... Invalidate this frame
     a1(i) = NaN;  a2(i) = NaN;  t2(i) = NaN;  ISI(i) = NaN;
