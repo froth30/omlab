@@ -94,15 +94,46 @@ nframes = length(tframes);
 
 dataPlotter(21);  ylim([-15 20])
 
-T = NaN(nframes,5);
-%% BREAK - force workspace to update
 for i = 1:nframes
-  fprintf('Frame #%i:\n', i)
+  fprintf('\nFrame #%i\n', i)
+  title(['Saccadic Tests: \itFrame by Frame ('...
+                 num2str(i) '/' num2str(nframes) ')'])
   tframe = tframes(i);  xlim([0 3] + tframe)
-  k = 0;
-  while ~k
-    k = waitforbuttonpress;
-  end
+  dt = t(2)-t(1);  ind = tframe/dt+1 : (tframe+3)/dt;
+  
+  % Find target delay
+  trise = t(find(st(ind) >  1, 1));
+  if isempty(trise); continue; end
+  tfall = t(find(st(ind) < -1, 1));
+  if isempty(tfall); continue; end
+  T0 = min(trise,tfall);
+  T1 = max(trise,tfall);
+  T  = T1 - T0;
+  
+  % Measure amplitudes
+  disp('                           ----O    O----')
+  disp('  Measure amplitudes...        |    |    ')
+  disp('                               +----+    ')
+  [~,a1] = selectDataPoint();
+  fprintf('%+30s', sprintf('a1 = %f        ', a1))
+  [~,a2] = selectDataPoint();
+  fprintf('a2 = %f\n\n', a2)
+  
+  % Measure latency of second saccade and intersaccadic interval (ISI)
+  disp('                           ----+    +----')
+  disp('  Measure ISI bounds...        |    |    ')
+  disp('                               O----O    ')
+  [ISI0,~] = selectDataPoint();
+  fprintf('%+30s', sprintf('ISI0 = %f        ', a1))
+  [ISI1,~] = selectDataPoint();
+  fprintf('ISI1 = %f\n', a2)
+  t2   = ISI1 - T1;    fprintf('    ->  t2  = %f\n',  t2)
+  ISI  = ISI1 - ISI0;  fprintf('    ->  ISI = %f\n', ISI)
+  
+  % Save measurements in struct
+  fprintf('\n  Saving frame...\n\n')
+  tbl.T (i) = T;   tbl.a1 (i) = a1;    tbl.a2(i) = a2;
+  tbl.t2(i) = t2;  tbl.ISI(i) = ISI;
 end
-disp('Reached end of saccadic tests. Hit any key to exit...')
+disp('End of Saccadic Tests! Press any button to exit...')
 waitforbuttonpress;  close
