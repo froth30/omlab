@@ -132,8 +132,28 @@ for i = 1:nframes
   
   % Save measurements in struct
   fprintf('\n  Saving frame...\n\n')
-  tbl.T (i) = T;   tbl.a1 (i) = a1;    tbl.a2(i) = a2;
-  tbl.t2(i) = t2;  tbl.ISI(i) = ISI;
+  tbl.T(i) = T;    tbl.a1(i) = a1;    tbl.a2 (i) = a2;
+                   tbl.t2(i) = t2;    tbl.ISI(i) = ISI;
 end
 disp('End of Saccadic Tests! Press any button to exit...')
 waitforbuttonpress;  close
+
+
+%% Compute means for each of the 11 different target delays
+
+i = find(tbl.T);    % find all frames with nonzero values of T
+T = tbl.T(i);    a1 = tbl.a1(i);    a2  = tbl.a2 (i);
+                 t2 = tbl.t2(i);    ISI = tbl.ISI(i);
+
+Texp = [0.02 0.05:0.05:0.50];
+params = {'a1', 'a2', 't2', 'ISI'};
+for i = 1:11
+  Tind = find(abs(T-Texp(i)) < 0.0001);
+  for n = 1:4
+    p = params{n};
+    eval(sprintf('%s_(i) = mean(%s(Tind))', p,p))
+  end
+end
+
+tbl_.T = Texp;    tbl_.a1 = a1_;    tbl_.a2  = a2_ ;
+                  tbl_.t2 = t2_;    tbl_.ISI = ISI_;
