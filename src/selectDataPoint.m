@@ -19,7 +19,8 @@ function [x,y] = selectDataPoint()
   end
   
   % Acquire cursor position
-  pos = getCursorInfo(dcm).Position;
+  cinfo = getCursorInfo(dcm);
+  pos = cinfo.Position;
   x = pos(1);
   y = pos(2);
   
