@@ -169,7 +169,7 @@ plot(tbl_.T, tbl_.a2, 'Color',co(1,:), 'LineWidth',1.5);  grid on
 
 title('Mean Values for {\ita1} and {\ita2} vs. {\itT}')
 xlabel('Target Delay (s)', 'FontWeight','bold')
-ylabel('Position (\circ)',   'FontWeight','bold')
+ylabel('Position (\circ)', 'FontWeight','bold')
 legend('a1', 'a2')
 
                   
@@ -183,6 +183,6 @@ plot(tbl_.T, tbl_.ISI, 'Color',co(3,:), 'LineWidth',1.5);  grid on
 
 title('Mean Values for {\itt2} and {\itISI} vs. {\itT}')
 xlabel('Target Delay (s)', 'FontWeight','bold')
-ylabel('Position (\circ)',   'FontWeight','bold')
+ylabel('Time (s)',         'FontWeight','bold')
 legend('t2', 'ISI')
 
