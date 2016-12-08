@@ -151,9 +151,36 @@ for i = 1:11
   Tind = find(abs(T-Texp(i)) < 0.0001);
   for n = 1:4
     p = params{n};
-    eval(sprintf('%s_(i) = mean(%s(Tind))', p,p))
+    eval(sprintf('%s_(i) = mean(%s(Tind));', p,p))
   end
 end
 
 tbl_.T = Texp;    tbl_.a1 = a1_;    tbl_.a2  = a2_ ;
                   tbl_.t2 = t2_;    tbl_.ISI = ISI_;
+
+                  
+%% Part (a)  Plot mean values for a1 and a2 vs. T
+
+figure(50)
+
+plot(tbl_.T, [tbl_.a1; tbl_.a2], 'LineWidth',1.5)
+grid on
+
+title('Mean Values for {\ita1} and {\ita2} vs. {\itT}')
+xlabel('Target Delay (s)', 'FontWeight','bold')
+ylabel('Position (\circ)',   'FontWeight','bold')
+legend('a1', 'a2')
+
+                  
+%% Part (b)  Plot mean values for t2 and ISI vs. T
+
+figure(51)
+
+plot(tbl_.T, [tbl_.t2; tbl_.ISI], 'LineWidth',1.5)
+grid on
+
+title('Mean Values for {\itt2} and {\itISI} vs. {\itT}')
+xlabel('Target Delay (s)', 'FontWeight','bold')
+ylabel('Position (\circ)',   'FontWeight','bold')
+legend('t2', 'ISI')
+
