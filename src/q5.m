@@ -163,8 +163,9 @@ tbl_.T = Texp;    tbl_.a1 = a1_;    tbl_.a2  = a2_ ;
 
 figure(50)
 
-plot(tbl_.T, [tbl_.a1; tbl_.a2], 'LineWidth',1.5)
-grid on
+co = get(groot, 'DefaultAxesColorOrder');
+plot(tbl_.T, tbl_.a1, 'Color',co(5,:), 'LineWidth',1.5);  hold on
+plot(tbl_.T, tbl_.a2, 'Color',co(1,:), 'LineWidth',1.5);  grid on
 
 title('Mean Values for {\ita1} and {\ita2} vs. {\itT}')
 xlabel('Target Delay (s)', 'FontWeight','bold')
@@ -176,8 +177,9 @@ legend('a1', 'a2')
 
 figure(51)
 
-plot(tbl_.T, [tbl_.t2; tbl_.ISI], 'LineWidth',1.5)
-grid on
+co = get(groot, 'DefaultAxesColorOrder');
+plot(tbl_.T, tbl_.t2,  'Color',co(2,:), 'LineWidth',1.5);  hold on
+plot(tbl_.T, tbl_.ISI, 'Color',co(3,:), 'LineWidth',1.5);  grid on
 
 title('Mean Values for {\itt2} and {\itISI} vs. {\itT}')
 xlabel('Target Delay (s)', 'FontWeight','bold')
